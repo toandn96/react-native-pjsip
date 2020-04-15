@@ -210,6 +210,10 @@ public class PjSipCall extends Call {
         getService().emmitCallUpdated(this);
     }
 
+    public boolean isHeld() {
+        return this.isHeld;
+    }
+
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
 

@@ -203,6 +203,9 @@
         [NSException raise:@"Failed to delete account" format:@"Account with %@ id not found", @(accountId)];
     }
 
+    pjsua_acc_set_registration(accountId, PJ_FALSE);
+    pjsua_acc_del(accountId);
+
     [self.accounts removeObjectForKey:@(accountId)];
 }
 
@@ -383,6 +386,7 @@ static void onCallReceived(pjsua_acc_id accId, pjsua_call_id callId, pjsip_rx_da
     endpoint.calls[@(callId)] = call;
     
     [endpoint emmitCallReceived:call];
+    pjsua_call_answer(callId, 180, NULL, NULL);
 }
 
 static void onCallStateChanged(pjsua_call_id callId, pjsip_event *event) {

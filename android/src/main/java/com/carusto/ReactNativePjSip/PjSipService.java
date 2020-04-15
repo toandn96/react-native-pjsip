@@ -1077,7 +1077,9 @@ public class PjSipService extends Service {
     private void doPauseAllCalls() {
         for (PjSipCall call : mCalls) {
             try {
-                call.hold();
+                if (!call.isHeld() && mCalls.size() >= 2) {
+                    call.hold();
+                }
             } catch (Exception e) {
                 Log.w(TAG, "Failed to put call on hold", e);
             }

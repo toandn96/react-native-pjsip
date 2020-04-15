@@ -132,8 +132,8 @@
 }
 
 - (void) dealloc {
-    pjsua_acc_set_registration(self.id, PJ_FALSE);
-    pjsua_acc_del(self.id);
+    // pjsua_acc_set_registration(self.id, PJ_FALSE);
+    // pjsua_acc_del(self.id);
 }
 
 - (void) register: (bool) renew {
