@@ -500,6 +500,7 @@ public class PjSipService extends Service {
         cfg.getRegConfig().setRegistrarUri(regUri);
         cfg.getRegConfig().setRegisterOnAdd(configuration.isRegOnAdd());
         cfg.getSipConfig().getAuthCreds().add(cred);
+        cfg.getRegConfig().setTimeoutSec(configuration.getRegTimeout());
 
         cfg.getVideoConfig().getRateControlBandwidth();
 
@@ -921,6 +922,7 @@ public class PjSipService extends Service {
     }
 
     void emmitCallReceived(PjSipAccount account, PjSipCall call) {
+        try {
         // Automatically decline incoming call when user uses GSM
         if (!mGSMIdle) {
             try {
@@ -970,6 +972,14 @@ public class PjSipService extends Service {
         // -----
         mCalls.add(call);
         mEmitter.fireCallReceivedEvent(call);
+
+        // Send 180 ringing sip status code
+        CallOpParam prm = new CallOpParam();
+        prm.setStatusCode(pjsip_status_code.PJSIP_SC_RINGING);
+        call.answer(prm);
+    } catch (Exception e) {
+        Log.w(TAG, "Failed to handle call received event", e);
+    }
     }
 
     void emmitCallStateChanged(PjSipCall call, OnCallStateParam prm) {
