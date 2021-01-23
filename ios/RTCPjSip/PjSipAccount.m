@@ -36,10 +36,19 @@
 
         pjsua_acc_config cfg;
         pjsua_acc_config_default(&cfg);
+
+        pjsua_ip_change_acc_cfg ipCfg;
+        
+        ipCfg.shutdown_tp = PJ_TRUE;
+        ipCfg.hangup_calls = PJ_FALSE;
+        ipCfg.reinvite_flags = PJSUA_CALL_REINIT_MEDIA;
         
         cfg.vid_in_auto_show = PJ_TRUE;
         cfg.vid_out_auto_transmit = PJ_TRUE;
         cfg.ka_interval = 10;
+        cfg.reg_retry_interval = 7;
+        cfg.ip_change_cfg = ipCfg;
+        cfg.allow_contact_rewrite = 1;
         
         // General settings
         {

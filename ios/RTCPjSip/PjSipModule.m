@@ -248,6 +248,14 @@ RCT_EXPORT_METHOD(deactivateAudioSession: (RCTResponseSenderBlock) callback) {
 
 #pragma mark - Settings
 
+RCT_EXPORT_METHOD(handleIpChange: (RCTResponseSenderBlock) callback) {
+    pjsua_ip_change_param ipChange;
+    pj_status_t status = pjsua_handle_ip_change(&ipChange);
+    if (status != PJ_SUCCESS) {
+        NSLog(@"Failed to handle ip change");
+    }
+}
+
 RCT_EXPORT_METHOD(changeOrientation: (NSString*) orientation) {
     [[PjSipEndpoint instance] changeOrientation:orientation];
 }

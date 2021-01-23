@@ -517,6 +517,25 @@ export default class Endpoint extends EventEmitter {
         });
     }
 
+    /**
+     * Inform the stack that IP address change event was detected. The stack will:
+     * 1. Restart the listener (this step is configurable via pjsua_ip_change_param.restart_listener).
+     * 2. Shutdown the transport used by account registration (this step is configurable via pjsua_acc_config.ip_change_cfg.shutdown_tp).
+     * 3. Update contact URI by sending re-Registration (this step is configurable via a\ pjsua_acc_config.allow_contact_rewrite and a\ pjsua_acc_config.contact_rewrite_method)
+     * 4. Hangup active calls (this step is configurable via a\ pjsua_acc_config.ip_change_cfg.hangup_calls) or continue the call by sending re-INVITE (configurable via pjsua_acc_config.ip_change_cfg.reinvite_flags).
+     */
+    handleIpChange() {
+        return new Promise((resolve, reject) => {
+            NativeModules.PjSipModule.handleIpChange((successful, data) => {
+                if (successful) {
+                    resolve(data);
+                } else {
+                    reject(data);
+                }
+            });
+        });
+    }
+
     changeOrientation(orientation) {
       const orientations = [
         'PJMEDIA_ORIENT_UNKNOWN',
