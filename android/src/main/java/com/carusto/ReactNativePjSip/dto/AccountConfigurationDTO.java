@@ -28,6 +28,8 @@ public class AccountConfigurationDTO {
     @Nullable
     public Integer regTimeout;
 
+    public Integer retryIntervalSec;
+
     public Map<String, String> regHeaders;
 
     public String regContactParams;
@@ -91,6 +93,10 @@ public class AccountConfigurationDTO {
         return regTimeout;
     }
 
+    public Integer getRetryIntervalSec() {
+        return retryIntervalSec;
+    }
+
     public String getRegUri() {
         return "sip:"+ domain;
     }
@@ -128,6 +134,7 @@ public class AccountConfigurationDTO {
 
         c.regServer = intent.getStringExtra("regServer");
         c.regTimeout = 600;
+        c.retryIntervalSec = 7;
         c.regOnAdd = intent.getBooleanExtra("regOnAdd", true);
 
         if (intent.hasExtra("regTimeout")) {

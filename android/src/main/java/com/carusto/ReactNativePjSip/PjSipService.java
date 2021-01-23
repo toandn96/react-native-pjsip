@@ -501,7 +501,7 @@ public class PjSipService extends Service {
         cfg.getRegConfig().setRegisterOnAdd(configuration.isRegOnAdd());
         cfg.getSipConfig().getAuthCreds().add(cred);
         cfg.getRegConfig().setTimeoutSec(configuration.getRegTimeout());
-
+        cfg.getRegConfig().setRetryIntervalSec(configuration.getRetryIntervalSec());
         cfg.getVideoConfig().getRateControlBandwidth();
 
         // Registration settings
