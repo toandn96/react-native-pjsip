@@ -31,6 +31,7 @@
         self.regHeaders = config[@"regHeaders"] == nil ? [NSNull null] : config[@"regHeaders"];
         self.regContactParams = config[@"regContactParams"] == nil ? [NSNull null] : config[@"regContactParams"];
         self.regOnAdd = config[@"regOnAdd"] == @YES || config[@"regOnAdd"] == nil ? true : false;
+        self.enableSRTP = [config[@"enableSRTP"]  isEqual: @YES] || config[@"enableSRTP"] == nil ? true : false;
         
         pj_status_t status;
 
@@ -49,6 +50,12 @@
         cfg.reg_retry_interval = 7;
         cfg.ip_change_cfg = ipCfg;
         cfg.allow_contact_rewrite = 1;
+        
+        if (self.enableSRTP) {
+            NSLog(@"NUACOM-MSG: Enabling SRTP as mandatory.");
+            cfg.use_srtp = PJMEDIA_SRTP_MANDATORY;
+            cfg.srtp_secure_signaling = 0;
+        }
         
         // General settings
         {

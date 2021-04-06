@@ -25,6 +25,8 @@ public class AccountConfigurationDTO {
 
     public String regServer;
 
+    public boolean enableSRTP;
+
     @Nullable
     public Integer regTimeout;
 
@@ -88,6 +90,8 @@ public class AccountConfigurationDTO {
         return regServer != null && regServer.length() > 0 ? regServer : "*";
     }
 
+    public boolean getEnableSRTP() { return enableSRTP; }
+
     @Nullable
     public Integer getRegTimeout() {
         return regTimeout;
@@ -136,6 +140,7 @@ public class AccountConfigurationDTO {
         c.regTimeout = 600;
         c.retryIntervalSec = 7;
         c.regOnAdd = intent.getBooleanExtra("regOnAdd", true);
+        c.enableSRTP = intent.getBooleanExtra("enableSRTP", true);
 
         if (intent.hasExtra("regTimeout")) {
             String regTimeout = intent.getStringExtra("regTimeout");

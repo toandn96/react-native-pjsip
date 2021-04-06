@@ -554,6 +554,13 @@ public class PjSipService extends Service {
             cfg.getSipConfig().setProxies(v);
         }
 
+        if (configuration.getEnableSRTP()) {
+            // Enable SRTP
+            Log.w(TAG, "NUACOM-MSG: Enabling SRTP as mandatory");
+            cfg.getMediaConfig().setSrtpUse(pjmedia_srtp_use.PJMEDIA_SRTP_MANDATORY);
+            cfg.getMediaConfig().setSrtpSecureSignaling(0);
+        }
+
         cfg.getMediaConfig().getTransportConfig().setQosType(pj_qos_type.PJ_QOS_TYPE_VOICE);
 
         cfg.getVideoConfig().setAutoShowIncoming(true);
