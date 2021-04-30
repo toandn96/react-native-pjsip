@@ -930,17 +930,17 @@ public class PjSipService extends Service {
     }
 
     void emmitCallReceived(PjSipAccount account, PjSipCall call) {
-        try {
-        // Automatically decline incoming call when user uses GSM
-        if (!mGSMIdle) {
-            try {
-                call.hangup(new CallOpParam(true));
-            } catch (Exception e) {
-                Log.w(TAG, "Failed to decline incoming call when user uses GSM", e);
-            }
+        // try {
+        // // Automatically decline incoming call when user uses GSM
+        // if (!mGSMIdle) {
+        //     try {
+        //         call.hangup(new CallOpParam(true));
+        //     } catch (Exception e) {
+        //         Log.w(TAG, "Failed to decline incoming call when user uses GSM", e);
+        //     }
 
-            return;
-        }
+        //     return;
+        // }
 
         /**
         // Automatically start application when incoming call received.
