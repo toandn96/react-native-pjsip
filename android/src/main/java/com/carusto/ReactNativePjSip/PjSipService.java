@@ -85,6 +85,8 @@ public class PjSipService extends Service {
 
     private List<PjSipCall> mCalls = new ArrayList<>();
 
+    private List<Integer> pCalls = new ArrayList<>();
+
     // In order to ensure that GC will not destroy objects that are used in PJSIP
     // Also there is limitation of pjsip that thread should be registered first before working with library
     // (but we couldn't register GC thread in pjsip)
@@ -317,6 +319,12 @@ public class PjSipService extends Service {
         }
 
         mCalls.remove(call);
+        
+        int position = pCalls.indexOf(call.getId());
+        if (position != -1) {
+            pCalls.remove(position);
+        }
+
         call.delete();
     }
 
@@ -672,6 +680,7 @@ public class PjSipService extends Service {
             doPauseParallelCalls(call);
 
             mCalls.add(call);
+            pCalls.add(call.getId());
             mEmitter.fireIntentHandled(intent, call.toJson());
         } catch (Exception e) {
             mEmitter.fireIntentHandled(intent, e);
@@ -977,7 +986,6 @@ public class PjSipService extends Service {
             });
             **/
 
-            // -----
             mCalls.add(call);
             mEmitter.fireCallReceivedEvent(call);
 
@@ -1095,7 +1103,7 @@ public class PjSipService extends Service {
     private void doPauseAllCalls() {
         for (PjSipCall call : mCalls) {
             try {
-                if (!call.isHeld() && mCalls.size() >= 2) {
+                if (pCalls.contains(call.getId())) {
                     call.hold();
                 }
             } catch (Exception e) {
@@ -1109,10 +1117,8 @@ public class PjSipService extends Service {
         public void onReceive(Context context, Intent intent) {
             final String extraState = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
 
-            if (TelephonyManager.EXTRA_STATE_RINGING.equals(extraState) || TelephonyManager.EXTRA_STATE_OFFHOOK.equals(extraState)) {
-                Log.d(TAG, "GSM call received, pause all SIP calls and do not accept incoming SIP calls.");
-
-                mGSMIdle = false;
+            if (TelephonyManager.EXTRA_STATE_OFFHOOK.equals(extraState)) {
+                Log.d(TAG, "NUACOM-MSG: GSM call received, pause all SIP calls.");
 
                 job(new Runnable() {
                     @Override
@@ -1120,9 +1126,6 @@ public class PjSipService extends Service {
                         doPauseAllCalls();
                     }
                 });
-            } else if (TelephonyManager.EXTRA_STATE_IDLE.equals(extraState)) {
-                Log.d(TAG, "GSM call released, allow to accept incoming calls.");
-                mGSMIdle = true;
             }
         }
     }
