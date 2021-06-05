@@ -91,6 +91,8 @@ RCT_EXPORT_METHOD(hangupCall: (int) callId callback:(RCTResponseSenderBlock) cal
     
     if (call) {
         [call hangup];
+        // https://trac.pjsip.org/repos/ticket/1049
+        [[PjSipEndpoint instance] emmitCallTerminated:call];
         callback(@[@TRUE]);
     } else {
         callback(@[@FALSE, @"Call not found"]);
@@ -102,6 +104,7 @@ RCT_EXPORT_METHOD(declineCall: (int) callId callback:(RCTResponseSenderBlock) ca
     
     if (call) {
         [call decline];
+        [[PjSipEndpoint instance] emmitCallTerminated:call];
         callback(@[@TRUE]);
     } else {
         callback(@[@FALSE, @"Call not found"]);
