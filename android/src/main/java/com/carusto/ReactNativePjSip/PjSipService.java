@@ -512,6 +512,7 @@ public class PjSipService extends Service {
         cfg.getRegConfig().setTimeoutSec(configuration.getRegTimeout());
         cfg.getRegConfig().setRetryIntervalSec(configuration.getRetryIntervalSec());
         cfg.getVideoConfig().getRateControlBandwidth();
+        cfg.getRegConfig().setDropCallsOnFail(true);
 
         // Registration settings
 
@@ -694,6 +695,7 @@ public class PjSipService extends Service {
             call.hangup(new CallOpParam(true));
 
             mEmitter.fireIntentHandled(intent);
+            emmitCallTerminated(call, new OnCallStateParam());
         } catch (Exception e) {
             mEmitter.fireIntentHandled(intent, e);
         }
@@ -711,6 +713,7 @@ public class PjSipService extends Service {
             prm.delete();
 
             mEmitter.fireIntentHandled(intent);
+            emmitCallTerminated(call, new OnCallStateParam());
         } catch (Exception e) {
             mEmitter.fireIntentHandled(intent, e);
         }
