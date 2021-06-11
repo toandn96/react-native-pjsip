@@ -121,12 +121,12 @@ public class PjSipService extends Service {
 
     private void load() {
         // Load native libraries
-        try {
-            System.loadLibrary("openh264");
-        } catch (UnsatisfiedLinkError error) {
-            Log.e(TAG, "Error while loading OpenH264 native library", error);
-            throw new RuntimeException(error);
-        }
+        // try {
+        //     System.loadLibrary("openh264");
+        // } catch (UnsatisfiedLinkError error) {
+        //     Log.e(TAG, "Error while loading OpenH264 native library", error);
+        //     throw new RuntimeException(error);
+        // }
 
         try {
             System.loadLibrary("pjsua2");
