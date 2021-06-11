@@ -4,7 +4,7 @@ set -e
 VERSION="2.9"
 URL="https://nuacom-app.s3.eu-west-1.amazonaws.com/releases/mobile/pjsip/pjsip-${VERSION}.tar.gz"
 LOCK=".libs.lock"
-DEST="release.tar.gz"
+DEST="pjsip-${VERSION}.tar.gz"
 DOWNLOAD=true
 
 if ! type "curl" > /dev/null; then
