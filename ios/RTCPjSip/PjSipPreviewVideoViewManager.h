@@ -1,6 +1,6 @@
-#import <Foundation/Foundation.h>
-#import <React/RCTViewManager.h>
+// #import <Foundation/Foundation.h>
+// #import <React/RCTViewManager.h>
 
-@interface PjSipPreviewVideoViewManager : RCTViewManager
+// @interface PjSipPreviewVideoViewManager : RCTViewManager
 
-@end
+// @end
