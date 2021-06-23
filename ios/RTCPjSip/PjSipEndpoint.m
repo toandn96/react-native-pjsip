@@ -46,7 +46,7 @@
         cfg.cb.on_incoming_call = &onCallReceived;
         cfg.cb.on_call_state = &onCallStateChanged;
         cfg.cb.on_call_media_state = &onCallMediaStateChanged;
-        cfg.cb.on_call_media_event = &onCallMediaEvent;
+        // cfg.cb.on_call_media_event = &onCallMediaEvent;
         
         cfg.cb.on_pager2 = &onMessageReceived;
         
