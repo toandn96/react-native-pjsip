@@ -692,10 +692,13 @@ public class PjSipService extends Service {
         try {
             int callId = intent.getIntExtra("call_id", -1);
             PjSipCall call = findCall(callId);
+            final pjsip_inv_state callState = call.getInfo().getState();
             call.hangup(new CallOpParam(true));
 
             mEmitter.fireIntentHandled(intent);
-            emmitCallTerminated(call, new OnCallStateParam());
+            if (callState != pjsip_inv_state.PJSIP_INV_STATE_EARLY) {
+                emmitCallTerminated(call, new OnCallStateParam());
+            }
         } catch (Exception e) {
             mEmitter.fireIntentHandled(intent, e);
         }
@@ -713,7 +716,6 @@ public class PjSipService extends Service {
             prm.delete();
 
             mEmitter.fireIntentHandled(intent);
-            emmitCallTerminated(call, new OnCallStateParam());
         } catch (Exception e) {
             mEmitter.fireIntentHandled(intent, e);
         }
