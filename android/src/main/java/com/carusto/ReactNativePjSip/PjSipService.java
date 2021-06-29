@@ -85,7 +85,7 @@ public class PjSipService extends Service {
 
     private List<PjSipCall> mCalls = new ArrayList<>();
 
-    private List<Integer> pCalls = new ArrayList<>();
+    private List<PjSipCall> pCalls = new ArrayList<>();
 
     // In order to ensure that GC will not destroy objects that are used in PJSIP
     // Also there is limitation of pjsip that thread should be registered first before working with library
@@ -296,11 +296,11 @@ public class PjSipService extends Service {
         mAccounts.remove(account);
 
         // Remove transport
-        try {
-            mEndpoint.transportClose(account.getTransportId());
-        } catch (Exception e) {
-            Log.w(TAG, "Failed to close transport for account", e);
-        }
+        // try {
+        //     mEndpoint.transportClose(account.getTransportId());
+        // } catch (Exception e) {
+        //     Log.w(TAG, "Failed to close transport for account", e);
+        // }
 
         // Remove account in PjSip
         account.delete();
@@ -319,11 +319,12 @@ public class PjSipService extends Service {
         }
 
         mCalls.remove(call);
+        pCalls.remove(call);
         
-        int position = pCalls.indexOf(call.getId());
-        if (position != -1) {
-            pCalls.remove(position);
-        }
+        // int position = pCalls.indexOf(call.getId());
+        // if (position != -1) {
+        //     pCalls.remove(position);
+        // }
 
         call.delete();
     }
@@ -681,7 +682,7 @@ public class PjSipService extends Service {
             doPauseParallelCalls(call);
 
             mCalls.add(call);
-            pCalls.add(call.getId());
+            pCalls.add(call);
             mEmitter.fireIntentHandled(intent, call.toJson());
         } catch (Exception e) {
             mEmitter.fireIntentHandled(intent, e);
@@ -1108,7 +1109,7 @@ public class PjSipService extends Service {
     private void doPauseAllCalls() {
         for (PjSipCall call : mCalls) {
             try {
-                if (pCalls.contains(call.getId())) {
+                if (pCalls.contains(call)) {
                     call.hold();
                 }
             } catch (Exception e) {
