@@ -17,7 +17,7 @@ repositories {
 def DEFAULT_COMPILE_SDK_VERSION             = 23
 def DEFAULT_BUILD_TOOLS_VERSION             = "23.0.1"
 def DEFAULT_TARGET_SDK_VERSION              = 23
-def DEFAULT_NDK_VERSION                     = "21.0.6011959"
+def DEFAULT_NDK_VERSION                     = "18.1.5063045"
 
 android {
     compileSdkVersion rootProject.hasProperty('compileSdkVersion') ? rootProject.compileSdkVersion : DEFAULT_COMPILE_SDK_VERSION
