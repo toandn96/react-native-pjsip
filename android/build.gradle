@@ -22,7 +22,7 @@ def DEFAULT_NDK_VERSION                     = "18.1.5063045"
 android {
     compileSdkVersion rootProject.hasProperty('compileSdkVersion') ? rootProject.compileSdkVersion : DEFAULT_COMPILE_SDK_VERSION
     buildToolsVersion rootProject.hasProperty('buildToolsVersion') ? rootProject.buildToolsVersion : DEFAULT_BUILD_TOOLS_VERSION
-    ndkVersion DEFAULT_NDK_VERSION
+    ndkVersion rootProject.hasProperty('ndkVersion') ? rootProject.buildToolsVersion : DEFAULT_NDK_VERSION
 
     defaultConfig {
         minSdkVersion 16
