@@ -50,7 +50,9 @@
         cfg.reg_retry_interval = 7;
         cfg.ip_change_cfg = ipCfg;
         cfg.allow_contact_rewrite = 1;
+        cfg.use_timer = PJSUA_SIP_TIMER_INACTIVE;
         // cfg.drop_calls_on_reg_fail = PJ_TRUE;
+
         
         if (self.enableSRTP) {
             NSLog(@"NUACOM-MSG: Enabling SRTP as mandatory.");
