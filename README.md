@@ -7,13 +7,13 @@ A [PJSIP](http://www.pjsip.org/) module for React Native.
 - Support video and audio communication.
 - Ability to use Callkit and PushNotifications.
 - You can use it to build an iOS/Android app that can communicate with SIP server.
-- Android version is based on [react-native-pjsip-builder](https://github.com/datso/react-native-pjsip-builder)
+- Android version is based on [react-native-pjsip-builder](https://github.com/aldiand/react-native-pjsip-builder)
 - iOS version is based on [Vialer-pjsip-iOS](https://github.com/VoIPGRID/Vialer-pjsip-iOS)
 
 ## Installation
 
-- [iOS](https://github.com/datso/react-native-pjsip/blob/master/docs/installation_ios.md)
-- [Android](https://github.com/datso/react-native-pjsip/blob/master/docs/installation_android.md)
+- [iOS](https://github.com/aldiand/react-native-pjsip/blob/master/docs/installation_ios.md)
+- [Android](https://github.com/aldiand/react-native-pjsip/blob/master/docs/installation_android.md)
 
 ## Usage
 
@@ -92,10 +92,10 @@ endpoint.addListener("call_terminated", (newCall) => {
 
 ## API
 
-1. [Startup](https://github.com/datso/react-native-pjsip/blob/master/docs/startup.md)
-2. [Accounts](https://github.com/datso/react-native-pjsip/blob/master/docs/accounts.md)
-3. [Calls](https://github.com/datso/react-native-pjsip/blob/master/docs/calls.md)
-4. [Settings](https://github.com/datso/react-native-pjsip/blob/master/docs/settings.md)
+1. [Startup](https://github.com/aldiand/react-native-pjsip/blob/master/docs/startup.md)
+2. [Accounts](https://github.com/aldiand/react-native-pjsip/blob/master/docs/accounts.md)
+3. [Calls](https://github.com/aldiand/react-native-pjsip/blob/master/docs/calls.md)
+4. [Settings](https://github.com/aldiand/react-native-pjsip/blob/master/docs/settings.md)
 
 ## Demo
-The demo project is https://github.com/datso/react-native-pjsip-app. And you will need a SIP server.
+The demo project is https://github.com/aldiand/react-native-pjsip-app. And you will need a SIP server.
