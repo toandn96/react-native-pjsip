@@ -1,10 +1,10 @@
 #!/bin/bash
 set -e
 
-VERSION="2.9"
-URL="https://nuacom-app.s3.eu-west-1.amazonaws.com/releases/mobile/pjsip/pjsip-${VERSION}.tar.gz"
+VERSION="v2.9.0"
+URL="https://github.com/aldiand/react-native-pjsip-builder/releases/download/${VERSION}/release.tar.gz"
 LOCK=".libs.lock"
-DEST="pjsip-${VERSION}.tar.gz"
+DEST=".libs.tar.gz"
 DOWNLOAD=true
 
 if ! type "curl" > /dev/null; then
@@ -25,7 +25,7 @@ if [ -f ${LOCK} ]; then
 fi
 
 if [ "$DOWNLOAD" = true ]; then
-    curl -LO --silent "${URL}"
+    curl -L --silent "${URL}" -o "${DEST}"
     tar -xvf "${DEST}"
     rm -f "${DEST}"
 
