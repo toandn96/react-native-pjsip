@@ -708,6 +708,18 @@ export default class Endpoint extends EventEmitter {
 
         return destination;
     }
+
+    startConferenceCall() {
+        return new Promise((resolve, reject) => {
+            NativeModules.PjSipModule.startConferenceCall((successful, data) => {
+                if (successful) {
+                    resolve(data);
+                } else {
+                    reject(data);
+                }
+            });
+        });
+    }
     // setUaConfig(UaConfig value)
     // setMaxCalls
     // setUserAgent

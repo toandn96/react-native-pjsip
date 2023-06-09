@@ -1,4 +1,5 @@
 #import "PjSipEndpoint.h"
+#import "PjSipConference.h"
 #import "PjSipModule.h"
 
 #import <React/RCTBridge.h>
@@ -247,6 +248,15 @@ RCT_EXPORT_METHOD(activateAudioSession: (RCTResponseSenderBlock) callback) {
 
 RCT_EXPORT_METHOD(deactivateAudioSession: (RCTResponseSenderBlock) callback) {
     pjsua_set_no_snd_dev();
+}
+
+
+RCT_EXPORT_METHOD(startConferenceCall: (RCTResponseSenderBlock) callback) {
+    NSMutableDictionary* calls = [[PjSipEndpoint instance] calls];
+    for (NSString* callId in calls) {
+        [[PjSipConference instance] addCall:[calls objectForKey:callId]];
+    }
+    [[PjSipConference instance] start];
 }
 
 #pragma mark - Settings
