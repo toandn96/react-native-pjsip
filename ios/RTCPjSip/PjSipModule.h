@@ -1,5 +1,6 @@
 #import <React/RCTBridgeModule.h>
+#import <React/RCTEventEmitter.h>
 
-@interface PjSipModule : NSObject <RCTBridgeModule>
+@interface PjSipModule : RCTEventEmitter <RCTBridgeModule>
 
 @end

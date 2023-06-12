@@ -231,7 +231,7 @@ declare module '@aldiand/react-native-pjsip' {
       calls: Call[];
       [key: string]: any;
     }>;
-    updateStunServers(accountId: string, stunServerList: string[]): Promise<any>;
+    updateStunServers(accountId: number, stunServerList: string[]): Promise<any>;
     changeNetworkConfiguration(configuration: any): Promise<any>;
     changeServiceConfiguration(configuration: any): Promise<any>;
     createAccount(configuration: any): Promise<Account>;

@@ -6,6 +6,8 @@
 @property int id;
 @property bool isHeld;
 @property bool isMuted;
+@property bool isConference;
+@property NSMutableDictionary* conferencePeers;
 
 + (instancetype)itemConfig:(int)id;
 

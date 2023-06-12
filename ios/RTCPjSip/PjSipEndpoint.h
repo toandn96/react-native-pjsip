@@ -1,4 +1,5 @@
 #import <React/RCTBridgeModule.h>
+#import <React/RCTEventEmitter.h>
 
 #import "PjSipAccount.h"
 #import "PjSipCall.h"
@@ -8,7 +9,7 @@
 
 @property NSMutableDictionary* accounts;
 @property NSMutableDictionary* calls;
-@property(nonatomic, strong) RCTBridge *bridge;
+@property(nonatomic, strong) RCTEventEmitter *bridge;
 
 @property pjsua_transport_id tcpTransportId;
 @property pjsua_transport_id udpTransportId;

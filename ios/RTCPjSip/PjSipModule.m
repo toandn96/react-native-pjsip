@@ -2,17 +2,35 @@
 #import "PjSipConference.h"
 #import "PjSipModule.h"
 
-#import <React/RCTBridge.h>
-#import <React/RCTEventDispatcher.h>
 #import <React/RCTUtils.h>
 
-@interface PjSipModule ()
+@implementation PjSipModule {
+    bool hasListeners;
+}
 
-@end
+// Will be called when this module's first listener is added.
+-(void)startObserving {
+    hasListeners = YES;
+    // Set up any upstream listeners or background tasks as necessary
+}
 
-@implementation PjSipModule
+// Will be called when this module's last listener is removed, or on dealloc.
+-(void)stopObserving {
+    hasListeners = NO;
+    // Remove upstream listeners, stop unnecessary background tasks
+}
 
-@synthesize bridge = _bridge;
+- (NSArray *)supportedEvents
+{
+  return @[ @"pjSipRegistrationChanged",
+  @"pjSipCallReceived",
+  @"pjSipCallChanged",
+  @"pjSipCallTerminated",
+  @"pjSipCallScreenLocked",
+  @"pjSipMessageReceived",
+  @"pjSipConnectivityChanged"
+  ];
+}
 
 - (dispatch_queue_t)methodQueue {
     // TODO: Use special thread may be ?
@@ -31,10 +49,12 @@
 }
 
 RCT_EXPORT_METHOD(start: (NSDictionary *) config callback: (RCTResponseSenderBlock) callback) {
-    [PjSipEndpoint instance].bridge = self.bridge;
+    [PjSipEndpoint instance].bridge = self;
 
     NSDictionary *result = [[PjSipEndpoint instance] start: config];
     callback(@[@TRUE, result]);
+    NSLog(@"should print pjSipCallScreenLocked");
+    [self sendEventWithName:@"pjSipCallScreenLocked" body:nil];
 }
 
 RCT_EXPORT_METHOD(updateStunServers: (int) accountId stunServerList:(NSArray *) stunServerList callback:(RCTResponseSenderBlock) callback) {

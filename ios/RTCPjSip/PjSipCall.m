@@ -155,6 +155,23 @@
     if (status == PJSUA_CALL_MEDIA_ACTIVE || status == PJSUA_CALL_MEDIA_REMOTE_HOLD) {
         pjsua_conf_connect(info.conf_slot, 0);
         pjsua_conf_connect(0, info.conf_slot);
+        
+        if (self.isConference) {
+            for (NSString *key in self.conferencePeers) {
+                PjSipCall *peer = self.conferencePeers[key];
+                if (self.id != peer.id) {
+                    pjsua_conf_port_id portId =  pjsua_call_get_conf_port(peer.id);
+                    pj_status_t status = pjsua_conf_connect(portId, info.conf_slot);
+                    pj_status_t status2 = pjsua_conf_connect(info.conf_slot, portId);
+
+                    if (status != PJ_SUCCESS || status2 != PJ_SUCCESS) {
+                        NSLog(@"Failed to connect conference ports (%d) and (%d)", portId, info.conf_slot);
+                    } else {
+                        NSLog(@"Connected conference ports");
+                    }
+                }
+            }
+        }
     }
 }
 

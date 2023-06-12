@@ -184,7 +184,6 @@
     pj_pool_t *pool = pjsua_pool_create("tmp-pjsua", 1000, 1000);
     pjsua_acc_config_default(&cfg_update);
     pjsua_acc_get_config(accountId, pool, &cfg_update);
-    NSLog([NSString stringWithFormat: @"I AM ACC ID: %d", accountId]);
     pjsua_update_stun_servers(size, srv, false);
     
     pjsua_acc_modify(accountId, &cfg_update);
@@ -364,7 +363,8 @@
 }
 
 -(void)emmitEvent:(NSString*) name body:(id)body {
-    [[self.bridge eventDispatcher] sendAppEventWithName:name body:body];
+    NSLog([NSString stringWithFormat: @"PjSipEndpoint: %@", name]);
+    [self.bridge sendEventWithName:name body:body];
 }
 
 

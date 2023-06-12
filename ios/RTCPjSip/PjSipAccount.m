@@ -165,7 +165,8 @@
 #pragma mark EventHandlers
 
 - (void)onRegistrationChanged {
-    [[[PjSipEndpoint instance].bridge eventDispatcher] sendAppEventWithName:@"pjSipRegistrationChanged" body:[self toJsonDictionary]];
+    NSLog([NSString stringWithFormat: @"pjSipRegistrationChanged"]);
+    [[PjSipEndpoint instance].bridge sendEventWithName:@"pjSipRegistrationChanged" body:[self toJsonDictionary]];
 }
 
 #pragma mark -

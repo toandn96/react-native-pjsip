@@ -5,6 +5,8 @@
     "react-native"
   ],
   "rules": {
-    "semi": ["error", "never"]
+    "semi": ["error", "never"],
+    "max-len": "off",
+    "class-methods-use-this": "off"
   }
 }
