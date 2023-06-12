@@ -53,8 +53,10 @@ RCT_EXPORT_METHOD(start: (NSDictionary *) config callback: (RCTResponseSenderBlo
 
     NSDictionary *result = [[PjSipEndpoint instance] start: config];
     callback(@[@TRUE, result]);
-    NSLog(@"should print pjSipCallScreenLocked");
-    [self sendEventWithName:@"pjSipCallScreenLocked" body:nil];
+}
+
+RCT_EXPORT_METHOD(sendEvent: (NSString *) name callback: (RCTResponseSenderBlock) callback) {
+    [self sendEventWithName:name body:nil];
 }
 
 RCT_EXPORT_METHOD(updateStunServers: (int) accountId stunServerList:(NSArray *) stunServerList callback:(RCTResponseSenderBlock) callback) {
