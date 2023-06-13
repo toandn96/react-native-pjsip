@@ -1,4 +1,6 @@
 declare module '@aldiand/react-native-pjsip' {
+  import { EventEmitter } from 'events';
+
   export class AccountRegistration {
     private _status: string | null;
     private _statusText: string | null;
