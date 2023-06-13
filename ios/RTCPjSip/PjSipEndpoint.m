@@ -9,6 +9,7 @@
 #import "PjSipUtil.h"
 #import "PjSipEndpoint.h"
 #import "PjSipMessage.h"
+#import "PjSipModule.h"
 
 @implementation PjSipEndpoint
 
@@ -92,23 +93,6 @@
         }
     }
 
-    // Add UDP transport.
-    {
-        // Init transport config structure
-        pjsua_transport_config cfg;
-        pjsua_transport_config_default(&cfg);
-        pjsua_transport_id id;
-
-        // Add TCP transport.
-        status = pjsua_transport_create(PJSIP_TRANSPORT_UDP, &cfg, &id);
-        
-        if (status != PJ_SUCCESS) {
-            NSLog(@"Error creating UDP transport");
-        } else {
-            self.udpTransportId = id;
-        }
-    }
-    
     // Add TCP transport.
     {
         pjsua_transport_config cfg;
@@ -121,21 +105,6 @@
             NSLog(@"Error creating TCP transport");
         } else {
             self.tcpTransportId = id;
-        }
-    }
-    
-    // Add TLS transport.
-    {
-        pjsua_transport_config cfg;
-        pjsua_transport_config_default(&cfg);
-        pjsua_transport_id id;
-        
-        status = pjsua_transport_create(PJSIP_TRANSPORT_TLS, &cfg, &id);
-        
-        if (status != PJ_SUCCESS) {
-            NSLog(@"Error creating TLS transport");
-        } else {
-            self.tlsTransportId = id;
         }
     }
     
@@ -364,7 +333,7 @@
 
 -(void)emmitEvent:(NSString*) name body:(id)body {
     NSLog([NSString stringWithFormat: @"PjSipEndpoint: %@", name]);
-    [self.bridge sendEvent:name body:body];
+    [[PjSipModule getInstance] sendEventWithName:name body:body];
 }
 
 
