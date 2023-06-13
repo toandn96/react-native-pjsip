@@ -56,9 +56,7 @@ export default class Endpoint extends EventEmitter {
     DeviceEventEmitter.addListener('pjSipCallReceived', this._onCallReceived.bind(this))
     DeviceEventEmitter.addListener('pjSipCallChanged', this._onCallChanged.bind(this))
     DeviceEventEmitter.addListener('pjSipCallTerminated', this._onCallTerminated.bind(this))
-    DeviceEventEmitter.addListener('pjSipCallScreenLocked', () => {
-        console.log('pjSipCallScreenLocked ooooooo')
-    })
+    DeviceEventEmitter.addListener('pjSipCallScreenLocked', this._onCallScreenLocked.bind(this))
     DeviceEventEmitter.addListener('pjSipMessageReceived', this._onMessageReceived.bind(this))
     DeviceEventEmitter.addListener('pjSipConnectivityChanged', this._onConnectivityChanged.bind(this))
   }

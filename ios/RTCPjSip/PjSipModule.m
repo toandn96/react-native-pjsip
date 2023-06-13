@@ -32,6 +32,13 @@
   ];
 }
 
+- (void)sendEvent:(NSString *)eventName body:(id)body {
+    if (hasListeners) {
+        NSLog([NSString stringWithFormat: @"PjSipModule: %@", eventName]);
+        [self sendEventWithName:eventName body:body];
+    }
+}
+
 - (dispatch_queue_t)methodQueue {
     // TODO: Use special thread may be ?
     // return dispatch_queue_create("com.carusto.PJSipMdule", DISPATCH_QUEUE_SERIAL);

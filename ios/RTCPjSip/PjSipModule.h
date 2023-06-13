@@ -3,4 +3,6 @@
 
 @interface PjSipModule : RCTEventEmitter <RCTBridgeModule>
 
+- (void)sendEvent:(NSString *)eventName body:(id)body;
+
 @end

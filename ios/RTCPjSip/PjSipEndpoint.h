@@ -3,13 +3,14 @@
 
 #import "PjSipAccount.h"
 #import "PjSipCall.h"
+#import "PjSipModule.h"
 
 
 @interface PjSipEndpoint : NSObject
 
 @property NSMutableDictionary* accounts;
 @property NSMutableDictionary* calls;
-@property(nonatomic, strong) RCTEventEmitter *bridge;
+@property(nonatomic, strong) PjSipModule *bridge;
 
 @property pjsua_transport_id tcpTransportId;
 @property pjsua_transport_id udpTransportId;

@@ -364,7 +364,7 @@
 
 -(void)emmitEvent:(NSString*) name body:(id)body {
     NSLog([NSString stringWithFormat: @"PjSipEndpoint: %@", name]);
-    [self.bridge sendEventWithName:name body:body];
+    [self.bridge sendEvent:name body:body];
 }
 
 
