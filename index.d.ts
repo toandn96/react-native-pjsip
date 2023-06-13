@@ -1,6 +1,4 @@
 declare module '@aldiand/react-native-pjsip' {
-  import { EventEmitter } from 'events';
-
   export class AccountRegistration {
     private _status: string | null;
     private _statusText: string | null;
@@ -269,5 +267,7 @@ declare module '@aldiand/react-native-pjsip' {
       event: U,
       listener: EndpointEvents[U]
     ): this;
+    activateAudioSession(): Promise<any>;
+    deactivateAudioSession(): Promise<any>;
   }
 }  
