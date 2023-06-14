@@ -42,7 +42,6 @@ repositories {
 }
 
 dependencies {
-    compile 'com.facebook.react:react-native:+'
-    compile "com.google.code.gson:gson:2.+"
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.facebook.react:react-native:+'
+    implementation "com.google.code.gson:gson:2.+"
 }
