@@ -333,7 +333,7 @@
 
 -(void)emmitEvent:(NSString*) name body:(id)body {
     NSLog([NSString stringWithFormat: @"PjSipEndpoint: %@", name]);
-    [[PjSipModule getInstance] sendEventWithName:name body:body];
+    [[PjSipModule getInstance] sendEventName:name body:body];
 }
 
 

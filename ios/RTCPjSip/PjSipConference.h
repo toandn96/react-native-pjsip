@@ -19,7 +19,9 @@
 +(instancetype)instance;
 
 -(void)addCall:(PjSipCall*) call;
+-(void)removeCall:(PjSipCall*) call;
 -(void)start;
+-(void)stop;
 
 
 @end

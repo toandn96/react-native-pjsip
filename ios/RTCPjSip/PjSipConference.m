@@ -34,6 +34,13 @@
     self.calls[@(call.id)] = call;
 }
 
+-(void)removeCall:(PjSipCall*) call {
+    call.isConference = false;
+    [call.conferencePeers removeAllObjects];
+    [self.calls removeObjectForKey:@(call.id)];
+    [call hold];
+}
+
 -(void)start {
     for (NSString *key in self.calls) {
         PjSipCall *call = self.calls[key];
@@ -41,6 +48,13 @@
         if (call.isHeld) {
             [call unhold];
         }
+    }
+}
+
+-(void)stop {
+    for (NSString *key in self.calls) {
+        PjSipCall *call = self.calls[key];
+        [self removeCall:call];
     }
 }
 

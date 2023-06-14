@@ -4,6 +4,7 @@
 #import "PjSipEndpoint.h"
 #import "PjSipAccount.h"
 #import "PjSipUtil.h"
+#import "PjSipModule.h"
 
 @implementation PjSipAccount
 
@@ -166,7 +167,7 @@
 
 - (void)onRegistrationChanged {
     NSLog([NSString stringWithFormat: @"pjSipRegistrationChanged"]);
-    [[PjSipEndpoint instance].bridge sendEventWithName:@"pjSipRegistrationChanged" body:[self toJsonDictionary]];
+    [[PjSipModule getInstance] sendEventName:@"pjSipRegistrationChanged" body:[self toJsonDictionary]];
 }
 
 #pragma mark -

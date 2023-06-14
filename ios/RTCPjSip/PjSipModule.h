@@ -5,4 +5,6 @@
 
 +(PjSipModule *)getInstance;
 
+- (void)sendEventName:(NSString *)eventName body:(id)body;
+
 @end

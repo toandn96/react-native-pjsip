@@ -714,6 +714,30 @@ export default class Endpoint extends EventEmitter {
 
     return destination
   }
+
+  splitCall(call) {
+    return new Promise((resolve, reject) => {
+      NativeModules.PjSipModule.splitCall(call.getId(), (successful, data) => {
+        if (successful) {
+          resolve(data)
+        } else {
+          reject(data)
+        }
+      })
+    })
+  }
+
+  splitConferenceCall() {
+    return new Promise((resolve, reject) => {
+      NativeModules.PjSipModule.splitConferenceCall((successful, data) => {
+        if (successful) {
+          resolve(data)
+        } else {
+          reject(data)
+        }
+      })
+    })
+  }
   // setUaConfig(UaConfig value)
   // setMaxCalls
   // setUserAgent

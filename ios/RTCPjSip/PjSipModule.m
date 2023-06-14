@@ -57,6 +57,25 @@ static PjSipModule * _instance = nil;
     return _instance;
 }
 
+- (void)sendEventName:(NSString *)eventName body:(id)body {
+  if (hasListeners) {
+    NSLog(@"PjSipModule sendEventName emitting event: %@", eventName);
+    [self sendEventWithName:eventName   body:body];
+  } else {
+    NSLog(@"PjSipModule sendEventName called without listeners: %@", eventName);
+  }
+}
+
+- (void)configureAudioSession
+{
+    pjsua_set_no_snd_dev();
+    pj_status_t status;
+    status = pjsua_set_snd_dev(PJMEDIA_AUD_DEFAULT_CAPTURE_DEV, PJMEDIA_AUD_DEFAULT_PLAYBACK_DEV);
+    if (status != PJ_SUCCESS) {
+        NSLog(@"Failed to active audio session");
+    }
+}
+
 RCT_EXPORT_METHOD(start: (NSDictionary *) config callback: (RCTResponseSenderBlock) callback) {
     [PjSipEndpoint instance].bridge = self;
 
@@ -107,10 +126,6 @@ RCT_EXPORT_METHOD(makeCall: (int) accountId destination: (NSString *) destinatio
         PjSipAccount *account = [endpoint findAccount:accountId];
         PjSipCall *call = [endpoint makeCall:account destination:destination callSettings:callSettings msgData:msgData];
         
-        // TODO: Remove this function
-        // Automatically put other calls on hold.
-        [endpoint pauseParallelCalls:call];
-        
         callback(@[@TRUE, [call toJsonDictionary:endpoint.isSpeaker]]);
     }
     @catch (NSException * e) {
@@ -150,9 +165,6 @@ RCT_EXPORT_METHOD(answerCall: (int) callId callback:(RCTResponseSenderBlock) cal
     if (call) {
         [call answer];
         
-        // Automatically put other calls on hold.
-        [endpoint pauseParallelCalls:call];
-        
         callback(@[@TRUE]);
     } else {
         callback(@[@FALSE, @"Call not found"]);
@@ -180,9 +192,6 @@ RCT_EXPORT_METHOD(unholdCall: (int) callId callback:(RCTResponseSenderBlock) cal
     if (call) {
         [call unhold];
         [endpoint emmitCallChanged:call];
-        
-        // Automatically put other calls on hold.
-        [endpoint pauseParallelCalls:call];
         
         callback(@[@TRUE]);
     } else {
@@ -269,12 +278,7 @@ RCT_EXPORT_METHOD(useEarpiece: (int) callId callback:(RCTResponseSenderBlock) ca
 }
 
 RCT_EXPORT_METHOD(activateAudioSession: (RCTResponseSenderBlock) callback) {
-    pjsua_set_no_snd_dev();
-    pj_status_t status;
-    status = pjsua_set_snd_dev(PJMEDIA_AUD_DEFAULT_CAPTURE_DEV, PJMEDIA_AUD_DEFAULT_PLAYBACK_DEV);
-    if (status != PJ_SUCCESS) {
-        NSLog(@"Failed to active audio session");
-    }
+    [self configureAudioSession];
 }
 
 RCT_EXPORT_METHOD(deactivateAudioSession: (RCTResponseSenderBlock) callback) {
@@ -289,6 +293,24 @@ RCT_EXPORT_METHOD(startConferenceCall: (RCTResponseSenderBlock) callback) {
     }
     [[PjSipConference instance] start];
 }
+
+RCT_EXPORT_METHOD(splitConferenceCall: (RCTResponseSenderBlock) callback) {
+    NSMutableDictionary* calls = [[PjSipEndpoint instance] calls];
+    for (NSString* callId in calls) {
+        [[PjSipConference instance] removeCall:[calls objectForKey:callId]];
+    }
+    
+    [self configureAudioSession];
+}
+
+RCT_EXPORT_METHOD(splitCall: (int) callId callback:(RCTResponseSenderBlock) callback) {
+    PjSipEndpoint* endpoint = [PjSipEndpoint instance];
+    PjSipCall *call = [endpoint findCall:callId];
+    [[PjSipConference instance] removeCall:call];
+    
+    [self configureAudioSession];
+}
+
 
 #pragma mark - Settings
 

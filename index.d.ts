@@ -254,6 +254,8 @@ declare module '@aldiand/react-native-pjsip' {
     useSpeaker(call: Call): Promise<any>;
     useEarpiece(call: Call): Promise<any>;
     startConferenceCall(): Promise<any>;
+    splitCall(call: Call): Promise<any>;
+    splitConferenceCall(): Promise<any>;
     xferCall(account: Account, call: Call, destination: string): Promise<any>;
     xferReplacesCall(call: Call, destCall: Call): Promise<any>;
     redirectCall(account: Account, call: Call, destination: string): Promise<any>;
