@@ -81,7 +81,7 @@ export default class Call {
      * @returns {String}
      */
     getCallId() {
-        return this._callId;
+        return this._callId?.toLowerCase ? this._callId.toLowerCase() : this._callId;
     }
 
 
