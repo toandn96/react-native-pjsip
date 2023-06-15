@@ -259,6 +259,7 @@ declare module '@aldiand/react-native-pjsip' {
     xferCall(account: Account, call: Call, destination: string): Promise<any>;
     xferReplacesCall(call: Call, destCall: Call): Promise<any>;
     redirectCall(account: Account, call: Call, destination: string): Promise<any>;
+    dtmfCall(call: Call, digits: string): Promise<any>;
     on<U extends keyof EndpointEvents>(
       event: U,
       listener: EndpointEvents[U]
