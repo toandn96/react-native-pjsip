@@ -295,9 +295,9 @@ public class PjSipCall extends Call {
                 videoStreamJson.put("captureDevice", info.getVideoCapDev());
                 videoStreamJson.put("windowId", info.getVideoIncomingWindowId());
 
-                json.put("dir", info.getDir().toString());
-                json.put("type", info.getType().toString());
-                json.put("status", info.getStatus().toString());
+                json.put("dir", info.getDir());
+                json.put("type", info.getType());
+                json.put("status", info.getStatus());
                 json.put("audioStream", audioStreamJson);
                 json.put("videoStream", videoStreamJson);
 
