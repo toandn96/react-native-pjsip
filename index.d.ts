@@ -226,7 +226,7 @@ declare module '@aldiand/react-native-pjsip' {
   export class Endpoint extends EventEmitter {
     constructor();
   
-    start(configuration: any): Promise<{
+    start(configuration?: any): Promise<{
       accounts: Account[];
       calls: Call[];
       [key: string]: any;
