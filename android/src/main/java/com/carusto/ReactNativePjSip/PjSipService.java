@@ -140,7 +140,7 @@ public class PjSipService extends Service {
         try {
             mEndpoint = new Endpoint();
             mEndpoint.libCreate();
-            mEndpoint.libRegisterThread(Thread.currentThread().getName());
+//            mEndpoint.libRegisterThread(Thread.currentThread().getName());
 
             // Register main thread
             Handler uiHandler = new Handler(Looper.getMainLooper());
@@ -148,7 +148,7 @@ public class PjSipService extends Service {
                 @Override
                 public void run() {
                     try {
-                        mEndpoint.libRegisterThread(Thread.currentThread().getName());
+//                        mEndpoint.libRegisterThread(Thread.currentThread().getName());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -260,7 +260,9 @@ public class PjSipService extends Service {
     @Override
     public void onDestroy() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            mWorkerThread.quitSafely();
+            if(mWorkerThread != null) {
+                mWorkerThread.quitSafely();
+            }
         }
 
         try {
