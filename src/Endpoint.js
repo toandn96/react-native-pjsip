@@ -1,9 +1,9 @@
-import React, { NativeEventEmitter, NativeModules } from 'react-native'
 import { EventEmitter } from 'events'
+import { NativeEventEmitter, NativeModules } from 'react-native'
 
+import Account from './Account'
 import Call from './Call'
 import Message from './Message'
-import Account from './Account'
 
 const DeviceEventEmitter = new NativeEventEmitter(NativeModules.PjSipModule)
 

@@ -214,6 +214,22 @@ export default class Call {
      * @returns {String}
      */
     getState() {
+        switch (this._state) {
+            case 0: 
+                return 'PJSIP_INV_STATE_NULL';
+            case 1: 
+                return 'PJSIP_INV_STATE_CALLING';
+            case 2: 
+                return 'PJSIP_INV_STATE_INCOMING';
+            case 3: 
+                return 'PJSIP_INV_STATE_EARLY';
+            case 4: 
+                return 'PJSIP_INV_STATE_CONNECTING';
+            case 5: 
+                return 'PJSIP_INV_STATE_CONFIRMED';
+            case 6: 
+                return 'PJSIP_INV_STATE_DISCONNECTED';
+        }
         return this._state;
     }
 

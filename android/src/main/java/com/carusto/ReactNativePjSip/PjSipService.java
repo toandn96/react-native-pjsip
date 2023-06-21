@@ -140,6 +140,9 @@ public class PjSipService extends Service {
         try {
             mEndpoint = new Endpoint();
             mEndpoint.libCreate();
+            StringVector servers = new StringVector();
+            servers.add("stun.l.google.com:19302");
+            mEndpoint.natUpdateStunServers(servers, true);
 //            mEndpoint.libRegisterThread(Thread.currentThread().getName());
 
             // Register main thread
@@ -311,16 +314,6 @@ public class PjSipService extends Service {
     }
 
     public void evict(final PjSipCall call) {
-        if (mHandler.getLooper().getThread() != Thread.currentThread()) {
-            job(new Runnable() {
-                @Override
-                public void run() {
-                    evict(call);
-                }
-            });
-            return;
-        }
-
         mCalls.remove(call);
         pCalls.remove(call);
 
@@ -399,6 +392,7 @@ public class PjSipService extends Service {
                 break;
             case PjActions.ACTION_DTMF_CALL:
                 handleCallDtmf(intent);
+                break;
             case PjActions.ACTION_CHANGE_CODEC_SETTINGS:
                 handleChangeCodecSettings(intent);
                 break;
@@ -701,7 +695,7 @@ public class PjSipService extends Service {
 
             mEmitter.fireIntentHandled(intent);
             if (callState != pjsip_inv_state.PJSIP_INV_STATE_EARLY) {
-                emmitCallTerminated(call, new OnCallStateParam());
+//                emmitCallTerminated(call, new OnCallStateParam());
             }
         } catch (Exception e) {
             mEmitter.fireIntentHandled(intent, e);
@@ -1056,8 +1050,6 @@ public class PjSipService extends Service {
     }
 
     void emmitCallTerminated(PjSipCall call, OnCallStateParam prm) {
-        final int callId = call.getId();
-
         job(new Runnable() {
             @Override
             public void run() {

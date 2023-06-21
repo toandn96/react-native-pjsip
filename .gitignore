@@ -4,6 +4,8 @@ android/build
 node_modules
 android/src/main/java/org/
 android/src/main/jniLibs/
+android/bin
 ios/VialerPJSIP.framework/
 .libs.lock
 .libs.tar.gz
+android/.settings
