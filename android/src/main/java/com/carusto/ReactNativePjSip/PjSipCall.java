@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import org.pjsip.pjsua2.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PjSipCall extends Call {
@@ -29,6 +30,8 @@ public class PjSipCall extends Call {
     private boolean isHeld = false;
 
     private boolean isMuted = false;
+
+    private boolean isConference = false;
 
     public PjSipCall(PjSipAccount acc, int call_id) {
         super(acc, call_id);
@@ -200,6 +203,29 @@ public class PjSipCall extends Call {
 
                     audioMedia.startTransmit(mgr.getPlaybackDevMedia());
                     mgr.getCaptureDevMedia().startTransmit(audioMedia);
+
+                    // handle conference
+                    if (isConference) {
+                        List<PjSipCall> peers = getService().getConferenceCalls();
+
+                        for (PjSipCall peer : peers) {
+                            if (peer.getId() != getId()) {
+                                for (int j = 0; j < peer.getInfo().getMedia().size(); j++) {
+                                    Media peerMedia = peer.getMedia(j);
+                                    CallMediaInfo peerMediaInfo = peer.getInfo().getMedia().get(j);
+
+                                    if (peerMediaInfo.getType() == pjmedia_type.PJMEDIA_TYPE_AUDIO
+                                            && peerMedia != null
+                                            && peerMediaInfo.getStatus() == pjsua_call_media_status.PJSUA_CALL_MEDIA_ACTIVE) {
+                                        AudioMedia peerAudioMedia = AudioMedia.typecastFromMedia(peerMedia);
+
+                                        audioMedia.startTransmit(peerAudioMedia);
+                                        peerAudioMedia.startTransmit(audioMedia);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 } catch (Exception exc) {
                     Log.e(TAG, "An error occurs while connecting audio media to sound device", exc);
                 }
@@ -212,6 +238,14 @@ public class PjSipCall extends Call {
 
     public boolean isHeld() {
         return this.isHeld;
+    }
+
+    public boolean isConference() {
+        return isConference;
+    }
+
+    public void setConference(boolean conference) {
+        isConference = conference;
     }
 
     public JSONObject toJson() {
@@ -251,6 +285,7 @@ public class PjSipCall extends Call {
             json.put("held", isHeld);
             json.put("muted", isMuted);
             json.put("speaker", speaker);
+            json.put("conference", isConference);
 
             try {
                 json.put("lastStatusCode", info.getLastStatusCode());

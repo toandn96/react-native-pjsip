@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.carusto.ReactNativePjSip.dto.CallSettingsDTO;
 import com.carusto.ReactNativePjSip.dto.SipMessageDTO;
+import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 
@@ -24,6 +25,11 @@ public class PjActions {
     public static final String ACTION_START = "start";
     public static final String ACTION_CREATE_ACCOUNT = "account_create";
     public static final String ACTION_CHANGE_CODEC_SETTINGS= "change_codec_settings'";
+
+    public static final String ACTION_START_CONFERENCE_CALL= "start_conference_call";
+
+    public static final String ACTION_STOP_CONFERENCE_CALL= "stop_conference_call";
+    public static final String ACTION_SPLIT_FROM_CONFERENCE_CALL= "split_from_conference_call";
     public static final String ACTION_REGISTER_ACCOUNT = "account_register";
     public static final String ACTION_DELETE_ACCOUNT = "account_delete";
     public static final String ACTION_MAKE_CALL = "call_make";
@@ -251,6 +257,14 @@ public class PjActions {
         return intent;
     }
 
+    public static Intent createStartConferenceCallIntent(int callbackId, Context context) {
+        Intent intent = new Intent(context, PjSipService.class);
+        intent.setAction(PjActions.ACTION_START_CONFERENCE_CALL);
+        intent.putExtra("callback_id", callbackId);
+
+        return intent;
+    }
+
     private static void formatIntent(Intent intent, ReadableMap configuration) {
         if (configuration == null) {
             return;
@@ -317,4 +331,5 @@ public class PjActions {
 
         return value;
     }
+
 }

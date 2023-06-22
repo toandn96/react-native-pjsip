@@ -5,6 +5,8 @@ import android.content.Intent;
 
 import com.facebook.react.bridge.*;
 
+import org.pjsip.pjsua2.Call;
+
 public class PjSipModule extends ReactContextBaseJavaModule {
 
     private static PjSipBroadcastReceiver receiver;
@@ -166,4 +168,28 @@ public class PjSipModule extends ReactContextBaseJavaModule {
         Intent intent = PjActions.createChangeCodecSettingsIntent(callbackId, codecSettings, getReactApplicationContext());
         getReactApplicationContext().startService(intent);
     }
+
+    @ReactMethod
+    public void startConferenceCall(Callback callback) {
+        int callbackId = receiver.register(callback);
+        Intent intent = PjActions.createStartConferenceCallIntent(callbackId, getReactApplicationContext());
+        getReactApplicationContext().startService(intent);
+    }
+
+    @ReactMethod
+    public void splitConferenceCall(Callback callback) {
+//        int callbackId = receiver.register(callback);
+//        Intent intent = PjActions.createStartConferenceCallIntent(callbackId, getReactApplicationContext());
+//        getReactApplicationContext().startService(intent);
+    }
+
+    @ReactMethod
+    public void splitCall(int callId, Callback callback) {
+//        int callbackId = receiver.register(callback);
+//        Intent intent = PjActions.createStartConferenceCallIntent(callbackId, getReactApplicationContext());
+//        getReactApplicationContext().startService(intent);
+    }
+
+
+
 }

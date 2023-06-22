@@ -88,6 +88,8 @@ public class PjSipService extends Service {
 
     private List<PjSipCall> pCalls = new ArrayList<>();
 
+    private List<PjSipCall> cCalls = new ArrayList<>();
+
     // In order to ensure that GC will not destroy objects that are used in PJSIP
     // Also there is limitation of pjsip that thread should be registered first before working with library
     // (but we couldn't register GC thread in pjsip)
@@ -316,6 +318,13 @@ public class PjSipService extends Service {
     public void evict(final PjSipCall call) {
         mCalls.remove(call);
         pCalls.remove(call);
+        if(call.isConference()) {
+            cCalls.remove(call);
+            if(cCalls.size() == 1) {
+                cCalls.get(0).setConference(false);
+                cCalls.clear();
+            }
+        }
 
         // int position = pCalls.indexOf(call.getId());
         // if (position != -1) {
@@ -395,6 +404,15 @@ public class PjSipService extends Service {
                 break;
             case PjActions.ACTION_CHANGE_CODEC_SETTINGS:
                 handleChangeCodecSettings(intent);
+                break;
+            case PjActions.ACTION_START_CONFERENCE_CALL:
+                handleStartConferenceCall(intent);
+                break;
+            case PjActions.ACTION_STOP_CONFERENCE_CALL:
+                handleStopConferenceCall(intent);
+                break;
+            case PjActions.ACTION_SPLIT_FROM_CONFERENCE_CALL:
+                handleSplitFromConferenceCall(intent);
                 break;
 
             // Configuration actions
@@ -761,7 +779,9 @@ public class PjSipService extends Service {
             call.unhold();
 
             // Automatically put other calls on hold.
-            doPauseParallelCalls(call);
+            if(!call.isConference()) {
+                doPauseParallelCalls(call);
+            }
 
             mEmitter.fireIntentHandled(intent);
         } catch (Exception e) {
@@ -907,6 +927,58 @@ public class PjSipService extends Service {
                 }
             }
 
+            mEmitter.fireIntentHandled(intent);
+        } catch (Exception e) {
+            mEmitter.fireIntentHandled(intent, e);
+        }
+    }
+
+    List<PjSipCall> getConferenceCalls() {
+        return cCalls;
+    }
+    private void handleStartConferenceCall(Intent intent) {
+        try {
+            // set conference flag to true for all calls
+            for (PjSipCall call : mCalls) {
+                call.setConference(true);
+                cCalls.add(call);
+            }
+
+            // unhold all calls
+            for (PjSipCall call : mCalls) {
+                if (call.isHeld()) {
+                    call.unhold();
+                }
+            }
+
+            mEmitter.fireIntentHandled(intent);
+        } catch (Exception e) {
+            mEmitter.fireIntentHandled(intent, e);
+        }
+    }
+
+    private void handleStopConferenceCall(Intent intent) {
+        try {
+            for (PjSipCall call : cCalls) {
+                call.setConference(false);
+            }
+
+            mEmitter.fireIntentHandled(intent);
+        } catch (Exception e) {
+            mEmitter.fireIntentHandled(intent, e);
+        }
+    }
+
+    private void handleSplitFromConferenceCall(Intent intent) {
+        try {
+            int callId = intent.getIntExtra("call_id", -1);
+            PjSipCall call = findCall(callId);
+            call.setConference(false);
+            cCalls.remove(call);
+            if(cCalls.size() == 1) {
+                cCalls.get(0).setConference(false);
+                cCalls.clear();
+            }
             mEmitter.fireIntentHandled(intent);
         } catch (Exception e) {
             mEmitter.fireIntentHandled(intent, e);
