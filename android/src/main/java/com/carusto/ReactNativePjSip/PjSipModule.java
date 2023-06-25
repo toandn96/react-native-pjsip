@@ -2,6 +2,7 @@ package com.carusto.ReactNativePjSip;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 
 import com.facebook.react.bridge.*;
 
@@ -9,10 +10,26 @@ import org.pjsip.pjsua2.Call;
 
 public class PjSipModule extends ReactContextBaseJavaModule {
 
+    private static final String TAG = "PjSipModule";
     private static PjSipBroadcastReceiver receiver;
+    public static PjSipModule instance = null;
+    public static ReactApplicationContext reactContext;
+
+    public static PjSipModule getInstance(ReactApplicationContext reactContext, boolean realContext) {
+        if (instance == null) {
+            Log.d(TAG, "[RNCallKeepModule] getInstance : " + (reactContext == null ? "null" : "ok"));
+            instance = new PjSipModule(reactContext);
+        }
+        if (realContext) {
+            instance.setContext(reactContext);
+        }
+        return instance;
+    }
 
     public PjSipModule(ReactApplicationContext context) {
         super(context);
+
+        reactContext = context;
 
         // Module could be started several times, but we have to register receiver only once.
         if (receiver == null) {
@@ -21,6 +38,15 @@ public class PjSipModule extends ReactContextBaseJavaModule {
         } else {
             receiver.setContext(context);
         }
+    }
+
+    public void setContext(ReactApplicationContext reactContext) {
+        Log.d(TAG, "[PjSipModule] updating react context");
+        this.reactContext = reactContext;
+    }
+
+    public Activity getCurrentReactActivity() {
+        return this.reactContext.getCurrentActivity();
     }
 
     @Override
@@ -178,18 +204,16 @@ public class PjSipModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void splitConferenceCall(Callback callback) {
-//        int callbackId = receiver.register(callback);
-//        Intent intent = PjActions.createStartConferenceCallIntent(callbackId, getReactApplicationContext());
-//        getReactApplicationContext().startService(intent);
+        int callbackId = receiver.register(callback);
+        Intent intent = PjActions.createStopConferenceCallIntent(callbackId, getReactApplicationContext());
+        getReactApplicationContext().startService(intent);
     }
 
     @ReactMethod
     public void splitCall(int callId, Callback callback) {
-//        int callbackId = receiver.register(callback);
-//        Intent intent = PjActions.createStartConferenceCallIntent(callbackId, getReactApplicationContext());
-//        getReactApplicationContext().startService(intent);
+        int callbackId = receiver.register(callback);
+        Intent intent = PjActions.createSplitConferenceCallIntent(callbackId, callId, getReactApplicationContext());
+        getReactApplicationContext().startService(intent);
     }
-
-
 
 }

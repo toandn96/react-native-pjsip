@@ -265,6 +265,23 @@ public class PjActions {
         return intent;
     }
 
+    public static Intent createStopConferenceCallIntent(int callbackId, ReactApplicationContext context) {
+        Intent intent = new Intent(context, PjSipService.class);
+        intent.setAction(PjActions.ACTION_STOP_CONFERENCE_CALL);
+        intent.putExtra("callback_id", callbackId);
+
+        return intent;
+
+    }
+
+    public static Intent createSplitConferenceCallIntent(int callbackId, int callId, ReactApplicationContext context) {
+        Intent intent = new Intent(context, PjSipService.class);
+        intent.setAction(PjActions.ACTION_SPLIT_FROM_CONFERENCE_CALL);
+        intent.putExtra("callback_id", callbackId);
+        intent.putExtra("call_id", callId);
+
+        return intent;
+    }
     private static void formatIntent(Intent intent, ReadableMap configuration) {
         if (configuration == null) {
             return;

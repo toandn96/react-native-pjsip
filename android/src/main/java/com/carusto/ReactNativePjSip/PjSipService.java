@@ -1,10 +1,16 @@
 package com.carusto.ReactNativePjSip;
 
+import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.media.AudioManager;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -17,6 +23,8 @@ import android.os.Process;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+
+import androidx.core.app.NotificationCompat;
 
 import com.carusto.ReactNativePjSip.dto.AccountConfigurationDTO;
 import com.carusto.ReactNativePjSip.dto.CallSettingsDTO;
@@ -37,6 +45,7 @@ import org.pjsip.pjsua2.CodecInfoVector2;
 import org.pjsip.pjsua2.Endpoint;
 import org.pjsip.pjsua2.EpConfig;
 import org.pjsip.pjsua2.OnCallStateParam;
+import org.pjsip.pjsua2.OnRegStartedParam;
 import org.pjsip.pjsua2.OnRegStateParam;
 import org.pjsip.pjsua2.SipHeader;
 import org.pjsip.pjsua2.SipHeaderVector;
@@ -60,6 +69,7 @@ import java.util.Map;
 
 public class PjSipService extends Service {
 
+    private static final int FOREGROUND_SERVICE_ID = 1339;
     private static String TAG = "PjSipService";
 
     private boolean mInitialized;
@@ -79,6 +89,8 @@ public class PjSipService extends Service {
     private ServiceConfigurationDTO mServiceConfiguration = new ServiceConfigurationDTO();
 
     private PjSipLogWriter mLogWriter;
+
+    private static int NOTIFICATION_ID = -4568;
 
     private PjSipBroadcastEmiter mEmitter;
 
@@ -145,21 +157,6 @@ public class PjSipService extends Service {
             StringVector servers = new StringVector();
             servers.add("stun.l.google.com:19302");
             mEndpoint.natUpdateStunServers(servers, true);
-//            mEndpoint.libRegisterThread(Thread.currentThread().getName());
-
-            // Register main thread
-            Handler uiHandler = new Handler(Looper.getMainLooper());
-            Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    try {
-//                        mEndpoint.libRegisterThread(Thread.currentThread().getName());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
-            uiHandler.post(runnable);
 
             // Configure endpoint
             EpConfig epConfig = new EpConfig();
@@ -262,6 +259,61 @@ public class PjSipService extends Service {
         return START_NOT_STICKY;
     }
 
+    private void startForegroundService() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            // Foreground services not required before SDK 28
+            return;
+        }
+        Log.d(TAG, "[PjSipService] startForegroundService");
+
+        String NOTIFICATION_CHANNEL_ID = "CloudPBXService";
+        String channelName = "CloudPBX Service";
+        NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
+        chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        assert manager != null;
+        manager.createNotificationChannel(chan);
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
+        notificationBuilder.setOngoing(true)
+                .setContentTitle("CloudPBX Service")
+                .setPriority(NotificationManager.IMPORTANCE_MIN)
+                .setCategory(Notification.CATEGORY_SERVICE);
+
+        Activity currentActivity = PjSipModule.instance.getCurrentReactActivity();
+        if (currentActivity != null) {
+            Intent notificationIntent = new Intent(this, currentActivity.getClass());
+            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+            final int flag =  Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;
+
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, NOTIFICATION_ID, notificationIntent, flag);
+
+            notificationBuilder.setContentIntent(pendingIntent);
+        }
+
+        notificationBuilder.setSmallIcon(R.drawable.ic_launcher_round);
+
+        Log.d(TAG, "[PjSipService] Starting foreground service");
+
+        Notification notification = notificationBuilder.build();
+
+        try {
+            startForeground(FOREGROUND_SERVICE_ID, notification);
+        } catch (Exception e) {
+            Log.w(TAG, "[PjSipService] Can't start foreground service : " + e.toString());
+        }
+    }
+
+    private void stopForegroundService() {
+        Log.d(TAG, "[PjSipService] stopForegroundService");
+        try {
+            stopForeground(STOP_FOREGROUND_REMOVE);
+        } catch (Exception e) {
+            Log.w(TAG, "[PjSipService] can't stop foreground service :" + e.toString());
+        }
+    }
+
     @Override
     public void onDestroy() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -351,12 +403,14 @@ public class PjSipService extends Service {
             // Account actions
             case PjActions.ACTION_CREATE_ACCOUNT:
                 handleAccountCreate(intent);
+                startForegroundService();
                 break;
             case PjActions.ACTION_REGISTER_ACCOUNT:
                 handleAccountRegister(intent);
                 break;
             case PjActions.ACTION_DELETE_ACCOUNT:
                 handleAccountDelete(intent);
+                stopForegroundService();
                 break;
 
             // Call actions
@@ -1003,6 +1057,10 @@ public class PjSipService extends Service {
         }
 
         throw new Exception("Call with specified \""+ id +"\" id not found");
+    }
+
+    void emmitRegistrationStarted(PjSipAccount account, OnRegStartedParam prm) {
+//        getEmitter().fireRegistrationChangeEvent(account);
     }
 
     void emmitRegistrationChanged(PjSipAccount account, OnRegStateParam prm) {

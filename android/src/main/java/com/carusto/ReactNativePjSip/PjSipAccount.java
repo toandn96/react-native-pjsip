@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import org.pjsip.pjsua2.Account;
 import org.pjsip.pjsua2.OnIncomingCallParam;
 import org.pjsip.pjsua2.OnInstantMessageParam;
+import org.pjsip.pjsua2.OnRegStartedParam;
 import org.pjsip.pjsua2.OnRegStateParam;
 
 public class PjSipAccount extends Account {
@@ -50,6 +51,11 @@ public class PjSipAccount extends Account {
         } catch (Exception e) {
             return "Connecting...";
         }
+    }
+
+    @Override
+    public void onRegStarted(OnRegStartedParam prm) {
+        service.emmitRegistrationStarted(this, prm);
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.facebook.react.uimanager.ViewManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class PjSipModulePackage implements ReactPackage {
@@ -18,10 +19,7 @@ public class PjSipModulePackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(
             ReactApplicationContext reactContext) {
-        List<NativeModule> modules = new ArrayList<>();
-
-        modules.add(new PjSipModule(reactContext));
-        return modules;
+        return Collections.<NativeModule>singletonList(PjSipModule.getInstance(reactContext, true));
     }
 
     @Override
