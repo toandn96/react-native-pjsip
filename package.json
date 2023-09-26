@@ -2,11 +2,9 @@
   "scripts": {
     "postinstall": "bash libs.sh",
     "lint": "eslint ./src",
-    "generate-docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose"
+    "generate-docs": "jsdoc --configure .jsdoc.json --verbose"
   },
-  "author": {
-    "name": "toandn96"
-  },
+  "author": "toandn96",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/toandn96/react-native-pjsip/issues"
@@ -46,5 +44,10 @@
     "type": "git",
     "url": "git+https://github.com/toandn96/react-native-pjsip.git"
   },
-  "version": "3.0.1"
+  "version": "3.0.1",
+  "types": "./index.d.ts",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  }
 }

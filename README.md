@@ -7,13 +7,13 @@ A [PJSIP](http://www.pjsip.org/) module for React Native.
 - Support video and audio communication.
 - Ability to use Callkit and PushNotifications.
 - You can use it to build an iOS/Android app that can communicate with SIP server.
-- Android version is based on [react-native-pjsip-builder](https://github.com/aldiand/react-native-pjsip-builder)
-- iOS version is based on [Vialer-pjsip-iOS](https://github.com/VoIPGRID/Vialer-pjsip-iOS)
+- Android version is based on [react-native-pjsip-builder](https://github.com/toandn96/react-native-pjsip-builder)
+- iOS version is based on [Vialer-pjsip-iOS](https://github.com/toandn96/Vialer-pjsip-iOS)
 
 ## Installation
 
-- [iOS](https://github.com/aldiand/react-native-pjsip/blob/master/docs/installation_ios.md)
-- [Android](https://github.com/aldiand/react-native-pjsip/blob/master/docs/installation_android.md)
+- [iOS](https://github.com/toandn96/react-native-pjsip/blob/master/docs/installation_ios.md)
+- [Android](https://github.com/toandn96/react-native-pjsip/blob/master/docs/installation_android.md)
 
 ## Usage
 
@@ -26,7 +26,7 @@ When User open your application, javascript start to work and now your js applic
 So thats why first step should call start method for pjsip module.
 
 ```javascript
-import {Endpoint} from 'react-native-pjsip'
+import {Endpoint} from '@toandn96/react-native-pjsip'
 
 let endpoint = new Endpoint();
 let state = await endpoint.start(); // List of available accounts and calls when RN context is started, could not be empty because Background service is working on Android
@@ -92,10 +92,10 @@ endpoint.addListener("call_terminated", (newCall) => {
 
 ## API
 
-1. [Startup](https://github.com/aldiand/react-native-pjsip/blob/master/docs/startup.md)
-2. [Accounts](https://github.com/aldiand/react-native-pjsip/blob/master/docs/accounts.md)
-3. [Calls](https://github.com/aldiand/react-native-pjsip/blob/master/docs/calls.md)
-4. [Settings](https://github.com/aldiand/react-native-pjsip/blob/master/docs/settings.md)
+1. [Startup](https://github.com/toandn96/react-native-pjsip/blob/master/docs/startup.md)
+2. [Accounts](https://github.com/toandn96/react-native-pjsip/blob/master/docs/accounts.md)
+3. [Calls](https://github.com/toandn96/react-native-pjsip/blob/master/docs/calls.md)
+4. [Settings](https://github.com/toandn96/react-native-pjsip/blob/master/docs/settings.md)
 
 ## Demo
-The demo project is https://github.com/aldiand/react-native-pjsip-app. And you will need a SIP server.
+The demo project is https://github.com/toandn96/react-native-pjsip-app. And you will need a SIP server.
