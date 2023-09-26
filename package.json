@@ -5,12 +5,11 @@
     "generate-docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose"
   },
   "author": {
-    "name": "Vadim Ruban",
-    "email": "vadim.ruban@carusto.com"
+    "name": "toandn96"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/aldiand/react-native-pjsip/issues"
+    "url": "https://github.com/toandn96/react-native-pjsip/issues"
   },
   "dependencies": {
     "events": "1.1.0"
@@ -27,9 +26,9 @@
     "jsdoc": "^3.5.5",
     "minami": "^1.2.3"
   },
-  "name": "@aldiand/react-native-pjsip",
+  "name": "@toandn96/react-native-pjsip",
   "description": "PJSIP module for React Native",
-  "homepage": "https://github.com/aldiand/react-native-pjsip",
+  "homepage": "https://github.com/toandn96/react-native-pjsip",
   "keywords": [
     "react-component",
     "react-native",
@@ -45,7 +44,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aldiand/react-native-pjsip.git"
+    "url": "git+https://github.com/toandn96/react-native-pjsip.git"
   },
-  "version": "2.9.24"
+  "version": "3.0.1"
 }

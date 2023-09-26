@@ -1,4 +1,4 @@
-declare module '@aldiand/react-native-pjsip' {
+declare module '@toandn96/react-native-pjsip' {
   import { EventEmitter } from 'events';
 
   export class AccountRegistration {
