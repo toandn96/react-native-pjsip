@@ -44,7 +44,7 @@
     "type": "git",
     "url": "git+https://github.com/toandn96/react-native-pjsip.git"
   },
-  "version": "3.0.1",
+  "version": "3.0.2",
   "types": "./index.d.ts",
   "main": "index.js",
   "directories": {
